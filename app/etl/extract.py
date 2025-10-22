@@ -34,19 +34,16 @@ def extract(path: str = "xyz.csv") -> ________:  # TODO (Find & Fix)
                 # TODO (Find & Fix)
                 pass
             except UnicodeDecodeError:
-                # TODO (Find & Fix)
-                pass
+                print(f"Failed to read with encoding '{encoding}'")  # Log the encoding that failed
         
         if df is None:
-            # TODO (Find & Fix)
-            pass
+            raise ValueError(f" Could not read CSV with tried encodings: {encodings}")
         
         # Validate data
         if df.empty:
-            # TODO (Find & Fix)
-            pass
+            raise ValueError("File contains no data")
         
-        print(f"✅ Extracted {len(df)} rows and {len(df.columns)} columns")  # TODO (Find & Fix): Use logging instead of print
+        print(f"✅ Extracted {len(df)} rows and {len(df.columns)} columns")  # TODO: Use logging instead of print
         return df
         
     except pd.errors.EmptyDataError:
