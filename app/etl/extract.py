@@ -21,7 +21,7 @@ def extract(path: str = "xyz.csv") -> ________:  # TODO (Find & Fix)
     if not os.path.exists(path):
         raise FileNotFoundError(f"❌ File not found: {path}")
     
-    if not path.lower().endswith('.txt'):  # TODO (Find & Fix)
+    if not path.lower().endswith('.txt'):
         raise ValueError(f"❌ File must be a CSV: {path}")
     
     try:
