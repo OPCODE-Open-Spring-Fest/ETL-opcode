@@ -32,10 +32,33 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         
         # TODO (Find & Fix): Table creation and schema logic missing
         
-        # TODO (Find & Fix): Idempotency check missing (should avoid duplicate inserts)
-        # TODO (Find & Fix): Bulk insert without checking for duplicates
-        df.to_sql(table_name, conn, if_exists="append", index=False)
+        # Idempotency check (should avoid duplicate inserts)
+        cursor.execute(f"""
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            employee_id INTEGER PRIMARY KEY, 
+            name TEXT,
+            email TEXT,
+            age INTEGER,
+            department TEXT,
+            job_title TEXT,
+            salary REAL,
+            city TEXT,
+            hire_date TEXT,
+            performance_rating REAL,
+            phone TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+
+        data_to_insert = [tuple(row) for row in df.itertuples(index=False, name=None)]
+        placeholders = ", ".join(["?"] * len(df.columns))
+        column_names = ", ".join(df.columns)
+        sql_query = f"INSERT OR IGNORE INTO {table_name} ({column_names}) VALUES ({placeholders})"
+        cursor.executemany(sql_query, data_to_insert)
         conn.commit()
+        # TODO (Find & Fix): Bulk insert without checking for duplicates
+
         
     except sqlite3.Error as e:
         if conn:
