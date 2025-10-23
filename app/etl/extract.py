@@ -3,7 +3,7 @@ import os
 # TODO (Find & Fix)
 from typing import Optional
 
-def extract(path: str = "xyz.csv") -> ________:  # TODO (Find & Fix)
+def extract(path: str = "xyz.csv") -> pd.DataFrame :
     """
     Extracts data from CSV file.
     
