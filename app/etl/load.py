@@ -46,8 +46,8 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
             hire_date TEXT,
             performance_rating REAL,
             phone TEXT,
-            created_at TEXT,
-            updated_at TEXT
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
 
