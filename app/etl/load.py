@@ -35,13 +35,14 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         # TODO (Find & Fix): Idempotency check missing (should avoid duplicate inserts)
         # TODO (Find & Fix): Bulk insert without checking for duplicates
         df.to_sql(table_name, conn, if_exists="append", index=False)
+        conn.commit()
         
     except sqlite3.Error as e:
-        # TODO (Find & Fix): Error handling missing
-        pass
+        if conn:
+            conn.rollback()
     except Exception as e:
-        # TODO (Find & Fix): Error handling missing
-        pass
+        if conn:
+            conn.rollback() 
     finally:
-        # TODO (Find & Fix): Connection not closed properly
-        pass
+        if conn:
+            conn.close()
