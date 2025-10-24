@@ -72,7 +72,7 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame:
             raise ValueError("❌ Failed to read data from file")
         
         if df.empty:
-            raise ValueError("❌ File contains no data")
+            raise ValueError(" File contains no data")
         
         print(f"✅ Extracted {len(df)} rows and {len(df.columns)} columns")  # TODO: Use logging instead of print
         return df
