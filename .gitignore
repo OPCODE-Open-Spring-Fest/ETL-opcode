@@ -1,1 +1,9 @@
 node_modules
+# Ignore virtual environments
+myenv/
+venv/
+.env
+.venv
+ENV/
+env.bak/
+venv.bak/
