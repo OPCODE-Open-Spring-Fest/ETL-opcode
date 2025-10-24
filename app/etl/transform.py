@@ -1,7 +1,5 @@
 import pandas as pd
-from datetime import datetime
 # TODO (Find & Fix)
-from typing import Optional
 
 def transform(df: pd.DataFrame) -> pd.DataFrame:
     """
