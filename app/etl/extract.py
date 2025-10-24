@@ -21,7 +21,7 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
     if not os.path.exists(path):
         raise FileNotFoundError(f"❌ File not found: {path}")
     
-    if not path.lower().endswith('.csv'):  # TODO (Find & Fix)
+    if not str(path).lower().endswith('.csv'):
         raise ValueError(f"❌ File must be a CSV: {path}")
     
     try:
@@ -32,12 +32,12 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
         for encoding in encodings:
             try:
                 # TODO (Find & Fix)
-                pass
+                pass 
             except UnicodeDecodeError:
                 print(f"Failed to read with encoding '{encoding}'")  # Log the encoding that failed
         
         if df is None:
-            raise ValueError(f" Could not read CSV with tried encodings: {encodings}")
+            raise ValueError(f"Could not read CSV with tried encodings: {encodings}")
         
         # Validate data
         if df.empty:
@@ -50,5 +50,3 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
         raise ValueError("❌ File contains no data")
     except pd.errors.ParserError as e:
         raise ValueError(f"❌ Error parsing CSV: {e}")
-    except Exception as e:
-        raise ValueError(f"❌ Unexpected error reading file: {e}")
