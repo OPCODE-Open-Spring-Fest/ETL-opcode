@@ -31,10 +31,15 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
         
         for encoding in encodings:
             try:
-                # TODO (Find & Fix)
-                pass
+                df = pd.read_csv(path, encoding=encoding)
+                print(f"✅ Successfully read CSV with encoding: {encoding}")
+                break
             except UnicodeDecodeError:
                 print(f"Failed to read with encoding '{encoding}'")  # Log the encoding that failed
+                continue
+            except Exception as e:
+                print(f"Error reading with encoding '{encoding}': {e}")
+                continue
         
         if df is None:
             raise ValueError(f" Could not read CSV with tried encodings: {encodings}")
