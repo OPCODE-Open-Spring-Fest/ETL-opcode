@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 # TODO (Find & Fix)
-from typing import Optional
 
 def extract(path: str = "xyz.csv") -> pd.DataFrame :
     """
