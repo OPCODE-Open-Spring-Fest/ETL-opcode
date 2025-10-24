@@ -2,7 +2,6 @@ import pandas as pd
 import sqlite3
 import os
 # TODO (Find & Fix)
-from typing import Optional
 
 def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "processed_data"):
     """
