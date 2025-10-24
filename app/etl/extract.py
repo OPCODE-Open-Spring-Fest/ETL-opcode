@@ -35,6 +35,10 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
                 pass 
             except UnicodeDecodeError:
                 print(f"Failed to read with encoding '{encoding}'")  # Log the encoding that failed
+                continue
+            except Exception as e:
+                print(f"Error reading with encoding '{encoding}': {e}")
+                continue
         
         if df is None:
             raise ValueError(f"Could not read CSV with tried encodings: {encodings}")
