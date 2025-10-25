@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 # TODO (Find & Fix)
-from typing import Optional
 
 def extract(path: str = "xyz.csv") -> pd.DataFrame :
     """
@@ -54,3 +53,5 @@ def extract(path: str = "xyz.csv") -> pd.DataFrame :
         raise ValueError("❌ File contains no data")
     except pd.errors.ParserError as e:
         raise ValueError(f"❌ Error parsing CSV: {e}")
+    except Exception as e:
+        raise ValueError(f"❌ Unexpected error reading file: {e}")
