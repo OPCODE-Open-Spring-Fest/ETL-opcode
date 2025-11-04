@@ -45,8 +45,15 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
                    if any(keyword in col.lower() for keyword in ['date', 'time', 'created', 'updated'])]
     
     for col in date_columns:
-        # TODO (Find & Fix): Date columns are not standardized
-        pass
+        try:
+            df_transformed[col] = pd.to_datetime(df_transformed[col], errors='coerce', infer_datetime_format=True)
+            # Standardize all dates to 'YYYY-MM-DD HH:MM:SS'
+            df_transformed[col] = df_transformed[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+            
+            print(f"✅ Standardized date column '{col}' (e.g., {df_transformed[col].iloc[0]})")
+        except Exception as e:
+            print(f"⚠️ Could not standardize column '{col}': {e}")
+
     
     # TODO (Find & Fix): Text columns are not cleaned (strip, lowercase)
     return df_transformed
