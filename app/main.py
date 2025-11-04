@@ -1,8 +1,13 @@
+import os
+
 from app.etl.extract import extract
 from app.etl.transform import transform
 from app.etl.load import load
 
-def run_pipeline(csv_path: str = "data.csv", db_path: str = "etl_data.db"):
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(BASE_DIR, "data.csv")
+
+def run_pipeline(csv_path: str =data_path, db_path: str = "etl_data.db"):
     """
     Run the complete ETL pipeline.
     
