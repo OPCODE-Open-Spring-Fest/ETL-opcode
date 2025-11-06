@@ -7,3 +7,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+etl_data.db
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

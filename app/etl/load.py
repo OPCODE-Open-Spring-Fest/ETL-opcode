@@ -21,8 +21,7 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
     # Ensure directory exists
     db_dir = os.path.dirname(db_path)
     if db_dir and not os.path.exists(db_dir):
-        os.makedirs(db_dir)
-    
+        os.makedirs(db_dir) 
     conn = None
     try:
         # Connect to database
@@ -30,11 +29,9 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         cursor = conn.cursor()
         
         # TODO (Find & Fix): Table creation and schema logic missing
-        
-        # Idempotency check (should avoid duplicate inserts)
         cursor.execute(f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            employee_id INTEGER PRIMARY KEY, 
+            employee_id TEXT PRIMARY KEY, 
             name TEXT,
             email TEXT,
             age INTEGER,
@@ -50,15 +47,11 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         )
         """)
 
-        data_to_insert = [tuple(row) for row in df.itertuples(index=False, name=None)]
         placeholders = ", ".join(["?"] * len(df.columns))
         column_names = ", ".join(df.columns)
-        sql_query = f"INSERT OR IGNORE INTO {table_name} ({column_names}) VALUES ({placeholders})"
-        cursor.executemany(sql_query, data_to_insert)
+        sql_query = f"INSERT OR REPLACE INTO {table_name} ({column_names}) VALUES ({placeholders})"  
+        cursor.executemany(sql_query, df.itertuples(index=False, name=None))
         conn.commit()
-        # TODO (Find & Fix): Bulk insert without checking for duplicates
-
-        
     except sqlite3.Error as e:
         if conn:
             conn.rollback()
