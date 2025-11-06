@@ -22,11 +22,14 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
     
     # Handle duplicates
     initial_rows = len(df_transformed)
-    # TODO (Find & Fix): Duplicates are not removed
+    # Removing duplicates 
+    df_transformed=df_transformed.drop_duplicates()
+
     duplicates_removed = initial_rows - len(df_transformed)
     if duplicates_removed > 0:
-        # TODO (Find & Fix): Should log how many duplicates were removed
-        pass
+        # Number of duplicates removed
+        print(f"✅ Removed {duplicates_removed} duplicate rows.")
+    
     
     # Handle null values in numeric columns
     numeric_columns = df_transformed.select_dtypes(include=['number']).columns
