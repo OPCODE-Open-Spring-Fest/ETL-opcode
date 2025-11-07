@@ -1,8 +1,11 @@
 import pandas as pd
 import os
-# TODO (Find & Fix)
 
-def extract(path: str = "xyz.csv") -> pd.DataFrame :
+# Get the base directory (app/) relative to this file (app/etl/extract.py)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_DATA_PATH = os.path.join(BASE_DIR, "data.csv")
+
+def extract(path: str = DEFAULT_DATA_PATH) -> pd.DataFrame :
     """
     Extracts data from CSV, Excel, or JSON file.
     
