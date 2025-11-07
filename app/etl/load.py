@@ -1,9 +1,14 @@
 import pandas as pd
 import sqlite3
 import os
+import logging
 # TODO (Find & Fix)
 from typing import Optional
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "processed_data"):
     """
     Loads data into SQLite database with proper error handling and upsert logic.
@@ -14,10 +19,10 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         table_name: Name of the table to create/update
     """
     if df.empty:
-        print("⚠️ Warning: Empty DataFrame received, nothing to load")  # TODO (Find & Fix)
+        logging.warning("⚠️ Warning: Empty DataFrame received, nothing to load")  # TODO (Find & Fix)
         return
     
-    print(f"🔄 Loading {len(df)} rows into database '{db_path}'")  # TODO (Find & Fix)
+    logging.info(f"🔄 Loading {len(df)} rows into database '{db_path}'")  # TODO (Find & Fix)
     
     # Ensure directory exists
     db_dir = os.path.dirname(db_path)
@@ -50,13 +55,21 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
+        columns = ", ".join(df.columns)
+        placeholders = ", ".join(["?"] * len(df.columns))
+        update_clause = ", ".join([f"{col}=excluded.{col}" for col in df.columns if col != "employee_id"])
+
+        sql_query = f"""
+        INSERT INTO {table_name} ({columns})
+        VALUES ({placeholders})
+        ON CONFLICT(employee_id) DO UPDATE SET {update_clause};
+        """
 
         data_to_insert = [tuple(row) for row in df.itertuples(index=False, name=None)]
-        placeholders = ", ".join(["?"] * len(df.columns))
-        column_names = ", ".join(df.columns)
-        sql_query = f"INSERT OR IGNORE INTO {table_name} ({column_names}) VALUES ({placeholders})"
         cursor.executemany(sql_query, data_to_insert)
         conn.commit()
+
+        logging.info(f"Successfully loaded {len(df)} records into '{table_name}'.")
         # TODO (Find & Fix): Bulk insert without checking for duplicates
 
         
