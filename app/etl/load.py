@@ -1,7 +1,11 @@
 import pandas as pd
 import sqlite3
 import os
+import logging  as lg 
 # TODO (Find & Fix)
+logger=lg.getLogger(__name__)
+logger.setLevel(lg.DEBUG)
+
 
 def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "processed_data"):
     """
@@ -13,10 +17,10 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         table_name: Name of the table to create/update
     """
     if df.empty:
-        print("⚠️ Warning: Empty DataFrame received, nothing to load")  # TODO (Find & Fix)
+        logger.warning("⚠️ Warning: Empty DataFrame received, nothing to load")  # TODO (Find & Fix)
         return
     
-    print(f"🔄 Loading {len(df)} rows into database '{db_path}'")  # TODO (Find & Fix)
+    logger.info(f"🔄 Loading {len(df)} rows into database '{db_path}'")  # TODO (Find & Fix)
     
     # Ensure directory exists
     db_dir = os.path.dirname(db_path)
