@@ -27,6 +27,7 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
     if db_dir and not os.path.exists(db_dir):
         os.makedirs(db_dir) 
     conn = None
+    cursor = None
     try:
         # Connect to database
         conn = sqlite3.connect(db_path)
@@ -63,5 +64,9 @@ def load(df: pd.DataFrame, db_path: str = "etl_data.db", table_name: str = "proc
         if conn:
             conn.rollback() 
     finally:
+        # Ensure cursor is closed
+        if cursor:
+            cursor.close()
+        # Ensure database connection is properly closed
         if conn:
             conn.close()
