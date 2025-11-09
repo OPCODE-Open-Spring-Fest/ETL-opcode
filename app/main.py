@@ -1,8 +1,11 @@
 import os
-
 from app.etl.extract import extract
 from app.etl.transform import transform
 from app.etl.load import load
+import logging as lg
+lg.basicConfig(level=lg.debug())
+
+logger = lg.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(BASE_DIR, "data.csv")
@@ -16,34 +19,34 @@ def run_pipeline(csv_path: str =data_path, db_path: str = "etl_data.db"):
         db_path: Path to the output SQLite database
     """
     try:
-        print("🚀 Starting ETL Pipeline")  # TODO (Find & Fix): Use logging instead of print
-        print(f"📁 Input file: {csv_path}")
-        print(f"🗄️ Output database: {db_path}")
-        print("-" * 50)
+        lg.info("🚀 Starting ETL Pipeline")  # TODO (Find & Fix): Use logging instead of print
+        lg.info(f"📁 Input file: {csv_path}")
+        lg.info(f"🗄️ Output database: {db_path}")
+        lg.info("-" * 50)
         
         # Extract
-        print("📥 STEP 1: EXTRACT")
+        lg.info("📥 STEP 1: EXTRACT")
         df = extract(csv_path)
-        print(f"✅ Extracted {len(df)} rows")
-        print(f"📊 Columns: {list(df.columns)}")
-        print()
+        lg.info(f"✅ Extracted {len(df)} rows")
+        lg.info(f"📊 Columns: {list(df.columns)}")
+        lg.info()
         
         # Transform
-        print("🔄 STEP 2: TRANSFORM")
+        lg.info("🔄 STEP 2: TRANSFORM")
         df_transformed = transform(df)
-        print(f"✅ Transformed data ready")
-        print()
+        lg.info(f"✅ Transformed data ready")
+        lg.info()
         
         # Load
-        print("📤 STEP 3: LOAD")
+        lg.info("📤 STEP 3: LOAD")
         load(df_transformed, db_path)
-        print()
+        lg.info()
         
-        print("🎉 ETL Pipeline completed successfully!")
-        print(f"📈 Final dataset: {len(df_transformed)} rows, {len(df_transformed.columns)} columns")
+        lg.info("🎉 ETL Pipeline completed successfully!")
+        lg.info(f"📈 Final dataset: {len(df_transformed)} rows, {len(df_transformed.columns)} columns")
         
     except FileNotFoundError as e:
-        print(f"❌ File Error: {e}")
+        lg.error(f"❌ File Error: {e}")
 
     except ValueError as e:
         # TODO (Find & Fix): Error handling missing
