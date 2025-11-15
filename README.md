@@ -45,14 +45,73 @@ Contributors should search for these comments and fix the issues.
 
 ## 🛠 Setup Instructions
 
+### Local Setup
+
 Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/<your-username>/etl-problems.git
 cd etl-problems
-pip install -r requirements.txt
-python main.py
+pip install -r app/requirements.txt
+python -m app.main
 ```
+
+### Running with Docker
+
+Containerize the ETL pipeline for a consistent, isolated development environment across all machines.
+
+**Prerequisites:** Docker and Docker Compose must be installed on your system.
+
+**Quick Start:**
+
+1. Clone the repository:
+```bash
+git clone https://github.com/<your-username>/etl-problems.git
+cd etl-problems
+```
+
+2. Run the pipeline in a container:
+```bash
+docker-compose up
+```
+
+This command will:
+- Build the Docker image from the provided `Dockerfile`
+- Start the ETL pipeline in an isolated container
+- Mount your local code directory as a volume, so changes you make to the code are immediately reflected in the container
+
+**Rebuilding the Image:**
+
+If you update dependencies in `requirements.txt`, rebuild the image:
+```bash
+docker-compose up --build
+```
+
+**Interactive Mode:**
+
+To run commands interactively inside the container:
+```bash
+docker-compose run etl bash
+```
+
+Then inside the container, you can run:
+```bash
+python -m app.main
+python -m pytest tests/
+```
+
+**Stopping the Container:**
+
+```bash
+docker-compose down
+```
+
+**Benefits:**
+- 🎯 **Consistency**: Same environment for all developers (Python 3.10, all dependencies)
+- 📦 **Isolation**: No conflicts with local Python installations
+- 🚀 **Reproducibility**: Works the same on Windows, macOS, and Linux
+- 🔧 **Hot Reload**: Code changes are immediately reflected without rebuilding
+- 🧪 **Testing**: Run tests in an isolated environment
 
 ---
 
